@@ -1,4 +1,4 @@
-export default function loadConfig() {
+export default function getConfig() {
   if (!process.env.MONGODB_URI)
     throw new Error("MONGODB_URI is missing in .env");
 
