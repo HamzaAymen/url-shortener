@@ -4,5 +4,6 @@ export default function getConfig() {
 
   return {
     MONGODB_URI: process.env.MONGODB_URI,
+    CACHED_TTL: 60 * 60 * 24,
   };
 }
