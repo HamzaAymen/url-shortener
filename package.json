@@ -4,6 +4,7 @@
   "workspaces": ["apps/*"],
   "scripts": {
     "dev:api": "bun run --filter @url-shortener/api dev",
-    "dev:web": "bun run --filter @url-shortener/web dev"
+    "dev:web": "bun run --filter @url-shortener/web dev",
+    "start": "bun run --filter @url-shortener/api start"
   }
 }

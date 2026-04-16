@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import getConfig from "./config";
@@ -8,10 +9,16 @@ const config = getConfig();
 await mongoose.connect(config.MONGODB_URI);
 
 const app = express();
+app.use(
+  cors({ origin: config.CORS_ORIGIN?.split(",").map((o) => o.trim()) ?? true }),
+);
 app.use(express.json());
+app.get("/health", (_req, res) => {
+  res.send("ok");
+});
 app.use(urlRoutes);
 
-const server = app.listen(config.PORT, () =>
+const server = app.listen(Number(config.PORT), "0.0.0.0", () =>
   console.log(`Server is running on PORT ${config.PORT}`),
 );
 
