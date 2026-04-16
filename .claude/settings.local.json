@@ -4,7 +4,8 @@
       "WebSearch",
       "Bash(bun create *)",
       "Bash(bun install *)",
-      "Bash(bun add *)"
+      "Bash(bun add *)",
+      "Bash(bun run *)"
     ]
   }
 }
