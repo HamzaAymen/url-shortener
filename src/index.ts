@@ -5,6 +5,8 @@ import getConfig from "./config";
 import Url from "./models/url.model";
 import Counter from "./models/counter.model";
 import Redis from "ioredis";
+import rateLimit from "express-rate-limit";
+import { RedisStore } from "rate-limit-redis";
 
 const redis = new Redis();
 const app = express();
@@ -15,6 +17,27 @@ await mongoose.connect(config.MONGODB_URI);
 
 const URL_REGEX = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;
 const BASE62_REGEX = /^[A-Za-z0-9]+$/;
+
+const createUrlLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+
+  store: new RedisStore({
+    sendCommand: (...args: string[]) =>
+      redis.call(...(args as [string, ...string[]])) as Promise<
+        number | string | (number | string)[]
+      >,
+  }),
+
+  handler: (_req, res) => {
+    res.status(429).json({
+      error: "Too many requests",
+      message: "You can only create 10 short URLs per minute.",
+    });
+  },
+});
 
 app.get("/:shortCode", async (req, res) => {
   const { shortCode } = req.params;
@@ -38,7 +61,7 @@ app.get("/:shortCode", async (req, res) => {
   return res.redirect(url.originalUrl!);
 });
 
-app.post("/shorten", async (req, res) => {
+app.post("/shorten", createUrlLimiter, async (req, res) => {
   const { originalUrl } = req.body;
 
   if (!URL_REGEX.test(originalUrl)) {

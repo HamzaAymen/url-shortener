@@ -17,8 +17,10 @@
   "dependencies": {
     "base62": "^2.0.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.3.2",
     "ioredis": "^5.10.1",
     "mongodb": "^7.1.1",
-    "mongoose": "^9.4.1"
+    "mongoose": "^9.4.1",
+    "rate-limit-redis": "^4.3.1"
   }
 }
