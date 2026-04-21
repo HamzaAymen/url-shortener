@@ -10,7 +10,7 @@ await mongoose.connect(config.MONGODB_URI);
 
 const app = express();
 app.use(
-  cors({ origin: config.CORS_ORIGIN?.split(",").map((o) => o.trim()) ?? true }),
+  cors({ origin: config.CORS_ORIGIN?.split(",").map((o) => o.trim()) ?? false }),
 );
 app.use(express.json());
 app.get("/health", (_req, res) => {
