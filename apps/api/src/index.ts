@@ -9,6 +9,7 @@ const config = getConfig();
 await mongoose.connect(config.MONGODB_URI);
 
 const app = express();
+app.set("trust proxy", 1);
 app.use(
   cors({ origin: config.CORS_ORIGIN?.split(",").map((o) => o.trim()) ?? false }),
 );
